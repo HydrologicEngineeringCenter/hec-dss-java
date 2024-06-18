@@ -20,7 +20,11 @@ tasks.test {
     useJUnitPlatform()
 }
 
+
+//https://www.hec.usace.army.mil/nexus/repository/maven-public/mil/army/usace/hec/hecdss/7-IS-6-win-x86_64/hecdss-7-IS-6-win-x86_64.zip
+
 tasks.named<Jar>("jar") {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     from("src/main/resources") {
         include("natives/**")
     }
