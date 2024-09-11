@@ -9,6 +9,7 @@ public interface MemoryAllocator {
     MemorySegment allocateChars(int characterCount);
     MemorySegment allocateInts(int integerCount);
     MemorySegment allocateDoubles(int doubleCount);
+    MemorySegment allocateFloats(int floatCount);
     MemorySegment allocateFromString(String stringToAllocate);
 
     static MemoryAllocator create(ForeignLanguage foreignLanguage, Arena memorySession) {

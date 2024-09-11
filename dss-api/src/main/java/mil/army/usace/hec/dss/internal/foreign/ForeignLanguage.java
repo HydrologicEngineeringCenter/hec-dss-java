@@ -23,4 +23,10 @@ public enum ForeignLanguage {
             case C -> ValueLayout.JAVA_DOUBLE;
         };
     }
+
+    public ValueLayout getFloatLayout() {
+        return switch (this) {
+            case C -> ValueLayout.JAVA_FLOAT;
+        };
+    }
 }
