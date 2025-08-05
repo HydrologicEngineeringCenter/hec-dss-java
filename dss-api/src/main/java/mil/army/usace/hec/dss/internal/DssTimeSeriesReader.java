@@ -4,6 +4,7 @@ import mil.army.usace.hec.dss.api.TimeSeriesData;
 import mil.army.usace.hec.dss.internal.foreign.ForeignLanguage;
 import mil.army.usace.hec.dss.internal.foreign.memory.allocator.MemoryAllocator;
 import mil.army.usace.hec.dss.internal.foreign.memory.parser.MemoryParser;
+import mil.army.usace.hec.dss.internal.util.PrimitiveArrayUtils;
 
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
@@ -79,10 +80,19 @@ public class DssTimeSeriesReader {
                 int[] timeArray = MemoryParser.parseInts(timeArrayOutput);
                 double[] valueArray = MemoryParser.parseDoubles(valueArrayOutput);
                 int numberValuesRead = MemoryParser.parseInt(numberValuesReadOutput);
+
+                timeArray = PrimitiveArrayUtils.trimArray(timeArray, numberValuesRead);
+                valueArray = PrimitiveArrayUtils.trimArray(valueArray, numberValuesRead);
+
                 int timeGranularitySeconds = MemoryParser.parseInt(timeGranularitySecondsOutput);
                 String dataUnits = MemoryParser.parseString(dataUnitsOutput);
                 String dataType = MemoryParser.parseString(dataTypeOutput);
-                validateOutputs(timeArray, valueArray, numberValuesRead);
+
+                boolean isValid = validateOutputs(timeArray, valueArray, numberValuesRead);
+                if (!isValid) {
+                    return TimeSeriesData.emptyTimeSeries();
+                }
+
                 return TimeSeriesData.create(timeArray, valueArray, timeGranularitySeconds, dataUnits, dataType);
             } else {
                 String message = formatLogMessage("Failed tsRetrieve", dssFileName, dssPathname, startDate, startTime, endDate, endTime);

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
+import java.nio.file.Paths;
 import java.util.logging.Logger;
 
 public class TestUtil {
@@ -15,11 +15,20 @@ public class TestUtil {
             pathFromResource = "/" + pathFromResource;
         }
 
-        return Optional.ofNullable(TestUtil.class.getResource(pathFromResource))
-                .map(URL::getFile)
-                .map(Path::of)
-                .map(Path::toAbsolutePath)
-                .orElse(null);
+            URL url = TestUtil.class.getResource(pathFromResource);
+            if (url == null) return null;
+
+
+        Path rval = null;
+        try {
+            rval = Paths.get(url.toURI());
+        }
+        catch (Exception e) {
+            return null;
+        }
+
+        return rval;
+
     }
 
     public static String createTempFile(String fileName) {

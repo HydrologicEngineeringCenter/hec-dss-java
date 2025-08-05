@@ -37,4 +37,12 @@ public interface MemoryParser {
     static double[] parseDoubles(MemorySegment memorySegment) {
         return memorySegment.toArray(ValueLayout.JAVA_DOUBLE);
     }
+
+    static float parseFloat(MemorySegment memorySegment) {
+        return memorySegment.get(ValueLayout.JAVA_FLOAT, 0);
+    }
+
+    static float[] parseFloats(MemorySegment memorySegment) {
+        return memorySegment.toArray(ValueLayout.JAVA_FLOAT);
+    }
 }
