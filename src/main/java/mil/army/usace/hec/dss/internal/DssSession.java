@@ -9,7 +9,7 @@ import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import java.util.logging.Logger;
 
-public final class DssSession implements AutoCloseable {
+final class DssSession implements AutoCloseable {
     private static final Logger logger = Logger.getLogger(DssSession.class.getName());
 
     private final String dssFilePath;
