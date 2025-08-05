@@ -6,6 +6,14 @@ plugins {
 group = "mil.army.usace.hec"
 version = "1.0-SNAPSHOT"
 
+// ------ Java Configuration -----------------------
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(25))
+    }
+}
+
+// ------- Dependencies -----------------------
 repositories {
     mavenCentral()
     maven { url = uri("https://www.hec.usace.army.mil/nexus/repository/maven-public/") }
