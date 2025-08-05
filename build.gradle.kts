@@ -19,9 +19,6 @@ val hecDssVersion = "7-IV-1"
 val nativeLibLoaderVersion = "2.5.0"
 val junitVersion = "5.10.0"
 
-// Define groups
-val nativeLibrariesGroup = "native libraries"
-
 dependencies {
     // HEC-DSS Binaries
     windowsNatives("mil.army.usace.hec:hecdss:$hecDssVersion-win-x86_64@zip")
@@ -35,42 +32,33 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
-// Modern task registration for Windows natives
-tasks.register<Copy>("extractWindowsNatives") {
-    group = nativeLibrariesGroup
-    description = "Extract Windows native libraries from the HEC-DSS zip file."
-    from(provider { windowsNatives.files.map { zipTree(it) } })
-    into(layout.buildDirectory.dir("resources/main/natives/windows_64"))
-
-    // Only extract when the source files have changed
-    inputs.files(windowsNatives)
-    outputs.dir(layout.buildDirectory.dir("resources/main/natives/windows_64"))
+tasks.named<Test>("test") {
+    useJUnitPlatform()
 }
 
-// Modern task registration for Linux natives
-tasks.register<Copy>("extractLinuxNatives") {
-    group = nativeLibrariesGroup
-    description = "Extract Linux native libraries from the HEC-DSS zip file."
-    from(provider { linuxNatives.files.map { zipTree(it) } })
-    into(layout.buildDirectory.dir("resources/main/natives/linux_64"))
-
-    // Only extract when the source files have changed
-    inputs.files(linuxNatives)
-    outputs.dir(layout.buildDirectory.dir("resources/main/natives/linux_64"))
+// -------------- Natives -----------------------
+tasks.named<ProcessResources>("processResources") {
+    dependsOn(extractAllNatives)
 }
 
-// Aggregate task using lazy configuration
+val nativeLibrariesGroup = "native libraries"
+
 val extractAllNatives by tasks.registering {
     group = nativeLibrariesGroup
     description = "Extract all supported OS native libraries from the HEC-DSS zip file."
     dependsOn(tasks.named("extractWindowsNatives"), tasks.named("extractLinuxNatives"))
 }
 
-// Configure processResources to depend on native extraction
-tasks.named<ProcessResources>("processResources") {
-    dependsOn(extractAllNatives)
-}
+registerNativeTask("Windows", windowsNatives, "windows_64")
+registerNativeTask("Linux", linuxNatives, "linux_64")
 
-tasks.named<Test>("test") {
-    useJUnitPlatform()
+fun registerNativeTask(name: String, sources: FileCollection, platform: String) {
+    tasks.register<Copy>("extract${name}Natives") {
+        group = nativeLibrariesGroup
+        description = "Extract $platform native libraries from the HEC-DSS zip file."
+        from(provider { sources.files.map { zipTree(it) } })
+        into(layout.buildDirectory.dir("resources/main/natives/${platform}"))
+        inputs.files(sources)
+        outputs.dir(layout.buildDirectory.dir("resources/main/natives/${platform}"))
+    }
 }
