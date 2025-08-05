@@ -1,5 +1,6 @@
 plugins {
     java
+    `maven-publish`
 }
 
 group = "mil.army.usace.hec"
@@ -32,6 +33,8 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
+// -------------- Testing -----------------------
+
 tasks.named<Test>("test") {
     useJUnitPlatform()
 }
@@ -62,3 +65,31 @@ fun registerNativeTask(name: String, sources: FileCollection, platform: String) 
         outputs.dir(layout.buildDirectory.dir("resources/main/natives/${platform}"))
     }
 }
+
+// -------------- Publishing -----------------------
+val mavenUser: String by project
+val mavenPassword: String by project
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "mil.army.usace.hec"
+            artifactId = "hec-dss-java"
+
+            from(components["java"])
+        }
+    }
+    repositories {
+        maven {
+            credentials {
+                username = mavenUser
+                password = mavenPassword
+            }
+            val releasesRepoUrl = uri("https://www.hec.usace.army.mil/nexus/repository/maven-releases/")
+            val snapshotsRepoUrl = uri("https://www.hec.usace.army.mil/nexus/repository/maven-snapshots/")
+            url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+        }
+    }
+}
+
+tasks.named("publish") { dependsOn("jar") }
