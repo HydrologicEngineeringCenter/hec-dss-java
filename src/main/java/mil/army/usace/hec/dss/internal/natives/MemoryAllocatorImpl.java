@@ -2,6 +2,7 @@ package mil.army.usace.hec.dss.internal.natives;
 
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
+import java.lang.foreign.ValueLayout;
 
 final class MemoryAllocatorImpl implements MemoryAllocator {
     private final ForeignLanguage foreignLanguage;
@@ -33,7 +34,12 @@ final class MemoryAllocatorImpl implements MemoryAllocator {
     }
 
     @Override
-    public MemorySegment allocateFromString(String stringToAllocate) {
+    public MemorySegment allocateString(String stringToAllocate) {
         return memorySession.allocateFrom(stringToAllocate);
+    }
+
+    @Override
+    public MemorySegment allocatePointer() {
+        return memorySession.allocate(ValueLayout.ADDRESS);
     }
 }

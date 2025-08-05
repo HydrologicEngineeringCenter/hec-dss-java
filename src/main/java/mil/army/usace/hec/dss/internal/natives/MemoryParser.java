@@ -1,7 +1,5 @@
 package mil.army.usace.hec.dss.internal.natives;
 
-import mil.army.usace.hec.dss.internal.foreign.ForeignLanguage;
-
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import java.nio.charset.StandardCharsets;

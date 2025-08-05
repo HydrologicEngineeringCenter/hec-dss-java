@@ -1,6 +1,8 @@
 package mil.army.usace.hec.dss.internal;
 
-import mil.army.usace.hec.dss.internal.foreign.NativeLibrary;
+import mil.army.usace.hec.dss.internal.natives.ForeignLanguage;
+import mil.army.usace.hec.dss.internal.natives.MemoryAllocator;
+import mil.army.usace.hec.dss.internal.natives.NativeLibrary;
 
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
@@ -43,8 +45,9 @@ public final class DssSession implements AutoCloseable {
     /* Helpers */
     private static MemorySegment initPointer(String dssFilePath) {
         try (Arena memorySession = Arena.ofConfined()) {
-            MemorySegment pathHolder = memorySession.allocateFrom(dssFilePath);
-            MemorySegment pointerHolder = memorySession.allocate(ValueLayout.ADDRESS);
+            MemoryAllocator memoryAllocator = MemoryAllocator.create(ForeignLanguage.C, memorySession);
+            MemorySegment pathHolder = memoryAllocator.allocateString(dssFilePath);
+            MemorySegment pointerHolder = memoryAllocator.allocatePointer();
             // Open DSS File
             int openStatus = hecdss_h.hec_dss_open(pathHolder, pointerHolder);
 

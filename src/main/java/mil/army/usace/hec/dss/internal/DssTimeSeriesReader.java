@@ -1,9 +1,9 @@
 package mil.army.usace.hec.dss.internal;
 
 import mil.army.usace.hec.dss.api.TimeSeriesData;
-import mil.army.usace.hec.dss.internal.foreign.ForeignLanguage;
-import mil.army.usace.hec.dss.internal.foreign.memory.allocator.MemoryAllocator;
-import mil.army.usace.hec.dss.internal.foreign.memory.parser.MemoryParser;
+import mil.army.usace.hec.dss.internal.natives.ForeignLanguage;
+import mil.army.usace.hec.dss.internal.natives.MemoryAllocator;
+import mil.army.usace.hec.dss.internal.natives.MemoryParser;
 import mil.army.usace.hec.dss.internal.util.PrimitiveArrayUtil;
 
 import java.lang.foreign.Arena;
@@ -40,11 +40,11 @@ public class DssTimeSeriesReader {
             int dataTypeBufferLength = DATA_TYPE_BUFFER_LENGTH;
 
             MemorySegment dssPointerInput = dssSession.getDssStackPointer();
-            MemorySegment dssPathnameInput = memoryAllocator.allocateFromString(dssPathname);
-            MemorySegment startDateInput = memoryAllocator.allocateFromString(startDate);
-            MemorySegment startTimeInput = memoryAllocator.allocateFromString(startTime);
-            MemorySegment endDateInput = memoryAllocator.allocateFromString(endDate);
-            MemorySegment endTimeInput = memoryAllocator.allocateFromString(endTime);
+            MemorySegment dssPathnameInput = memoryAllocator.allocateString(dssPathname);
+            MemorySegment startDateInput = memoryAllocator.allocateString(startDate);
+            MemorySegment startTimeInput = memoryAllocator.allocateString(startTime);
+            MemorySegment endDateInput = memoryAllocator.allocateString(endDate);
+            MemorySegment endTimeInput = memoryAllocator.allocateString(endTime);
 
             MemorySegment timeArrayOutput = memoryAllocator.allocateInts(numberValues);
             MemorySegment valueArrayOutput = memoryAllocator.allocateDoubles(numberValues);
@@ -111,11 +111,11 @@ public class DssTimeSeriesReader {
             MemoryAllocator memoryAllocator = MemoryAllocator.create(ForeignLanguage.C, memorySession);
 
             MemorySegment dssPointer = dssSession.getDssStackPointer();
-            MemorySegment dssPathnameInput = memoryAllocator.allocateFromString(dssPathname);
-            MemorySegment startDateInput = memoryAllocator.allocateFromString(startDate);
-            MemorySegment startTimeInput = memoryAllocator.allocateFromString(startTime);
-            MemorySegment endDateInput = memoryAllocator.allocateFromString(endDate);
-            MemorySegment endTimeInput = memoryAllocator.allocateFromString(endTime);
+            MemorySegment dssPathnameInput = memoryAllocator.allocateString(dssPathname);
+            MemorySegment startDateInput = memoryAllocator.allocateString(startDate);
+            MemorySegment startTimeInput = memoryAllocator.allocateString(startTime);
+            MemorySegment endDateInput = memoryAllocator.allocateString(endDate);
+            MemorySegment endTimeInput = memoryAllocator.allocateString(endTime);
             MemorySegment numberValuesOutput = memoryAllocator.allocateInts(1);
             MemorySegment qualityWidthOutput = memoryAllocator.allocateInts(1);
 

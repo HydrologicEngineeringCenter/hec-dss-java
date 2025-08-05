@@ -1,8 +1,8 @@
 package mil.army.usace.hec.dss.internal;
 
-import mil.army.usace.hec.dss.internal.foreign.ForeignLanguage;
-import mil.army.usace.hec.dss.internal.foreign.memory.allocator.MemoryAllocator;
-import mil.army.usace.hec.dss.internal.foreign.memory.parser.MemoryParser;
+import mil.army.usace.hec.dss.internal.natives.ForeignLanguage;
+import mil.army.usace.hec.dss.internal.natives.MemoryAllocator;
+import mil.army.usace.hec.dss.internal.natives.MemoryParser;
 
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
@@ -28,7 +28,7 @@ public final class DssCatalogReader {
 
             MemorySegment pathBuffer = memoryAllocator.allocateChars(charBufferLength);
             MemorySegment recordTypes = memoryAllocator.allocateInts(recordCount);
-            MemorySegment pathFilter = memoryAllocator.allocateFromString(dssPathname);
+            MemorySegment pathFilter = memoryAllocator.allocateString(dssPathname);
 
             hecdss_h.hec_dss_catalog(dssSession.getDssStackPointer(), pathBuffer, recordTypes, pathFilter, recordCount, MAX_PATHNAME_LENGTH);
             return MemoryParser.parseStrings(ForeignLanguage.C, pathBuffer);

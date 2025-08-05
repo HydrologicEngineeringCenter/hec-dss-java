@@ -8,7 +8,8 @@ public interface MemoryAllocator {
     MemorySegment allocateInts(int integerCount);
     MemorySegment allocateDoubles(int doubleCount);
     MemorySegment allocateFloats(int floatCount);
-    MemorySegment allocateFromString(String stringToAllocate);
+    MemorySegment allocateString(String stringToAllocate);
+    MemorySegment allocatePointer();
 
     static MemoryAllocator create(ForeignLanguage foreignLanguage, Arena memorySession) {
         return new MemoryAllocatorImpl(foreignLanguage, memorySession);

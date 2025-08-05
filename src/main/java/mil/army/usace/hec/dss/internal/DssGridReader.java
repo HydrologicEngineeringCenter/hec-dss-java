@@ -1,8 +1,8 @@
 package mil.army.usace.hec.dss.internal;
 
-import mil.army.usace.hec.dss.internal.foreign.ForeignLanguage;
-import mil.army.usace.hec.dss.internal.foreign.memory.allocator.MemoryAllocator;
-import mil.army.usace.hec.dss.internal.foreign.memory.parser.MemoryParser;
+import mil.army.usace.hec.dss.internal.natives.ForeignLanguage;
+import mil.army.usace.hec.dss.internal.natives.MemoryAllocator;
+import mil.army.usace.hec.dss.internal.natives.MemoryParser;
 
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
@@ -32,7 +32,7 @@ public final class DssGridReader {
             MemoryAllocator memoryAllocator = MemoryAllocator.create(ForeignLanguage.C, memorySession);
 
             MemorySegment dssPointerInput = dssSession.getDssStackPointer();
-            MemorySegment dssPathnameInput = memoryAllocator.allocateFromString(dssPathname);
+            MemorySegment dssPathnameInput = memoryAllocator.allocateString(dssPathname);
 
             MemorySegment typeOutput = memoryAllocator.allocateInts(1);
             MemorySegment dataTypeOutput = memoryAllocator.allocateInts(1);
