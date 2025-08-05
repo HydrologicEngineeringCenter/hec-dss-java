@@ -1,5 +1,8 @@
 package mil.army.usace.hec.dss.internal.natives;
 
+import org.scijava.nativelib.NativeLoader;
+
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public enum NativeLibrary {
@@ -14,9 +17,10 @@ public enum NativeLibrary {
 
     public void initialize() {
         try {
-            System.loadLibrary(this.libraryName);
+            NativeLoader.loadLibrary(this.libraryName);
         } catch (Exception exception) {
-            logger.severe("Failed to load library: " + this.libraryName);
+            String errorMessage = String.format("Failed to load native library: %s", this.libraryName);
+            logger.log(Level.SEVERE, errorMessage, exception);
         }
     }
 }
