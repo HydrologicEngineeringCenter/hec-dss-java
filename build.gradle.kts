@@ -9,7 +9,7 @@ version = "1.0-SNAPSHOT"
 // ------ Java Configuration -----------------------
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(25))
+        languageVersion.set(JavaLanguageVersion.of(24))
     }
 }
 
