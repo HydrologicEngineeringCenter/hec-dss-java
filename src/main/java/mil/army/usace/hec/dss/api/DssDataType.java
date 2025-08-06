@@ -1,5 +1,6 @@
 package mil.army.usace.hec.dss.api;
 
+// Maybe rename to: RecordingIntervalType
 public enum DssDataType {
     INSTANTANEOUS, ACCUMULATION, AVERAGE, UNKNOWN;
 
