@@ -15,7 +15,7 @@ class DssTimeSeriesReaderTest {
         String dssPathname = "/regular-time-series/GAPT/FLOW/*/6Hour/forecast1/";
         ZonedDateTime startTime = ZonedDateTime.parse("2021-09-15T07:00:00Z");
         ZonedDateTime endTime = ZonedDateTime.parse("2021-10-04T07:00:00Z");
-        TimeSeriesData timeSeriesData = DssTimeSeriesReader.getTimeSeries(dssFileName, dssPathname, startTime, endTime);
-        assertEquals(77, timeSeriesData.timeSeriesRecords().size());
+        RawDssTimeSeries timeSeriesData = DssTimeSeriesReader.getTimeSeries(dssFileName, dssPathname, startTime, endTime);
+        assertEquals(77, timeSeriesData.times().length);
     }
 }
