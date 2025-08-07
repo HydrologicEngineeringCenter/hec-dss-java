@@ -4,9 +4,11 @@ import mil.army.usace.hec.dss.internal.natives.ForeignLanguage;
 import mil.army.usace.hec.dss.internal.natives.MemoryAllocator;
 import mil.army.usace.hec.dss.internal.natives.MemoryParser;
 import mil.army.usace.hec.dss.internal.util.PrimitiveArrayUtil;
+import mil.army.usace.hec.dss.internal.util.TimeConverterUtil;
 
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.logging.Logger;
 
@@ -92,7 +94,8 @@ public class DssTimeSeriesReader {
                     return DssTimeSeries.empty();
                 }
 
-                return new DssTimeSeries(timeArray, valueArray, timeGranularitySeconds, dataUnits, dataType);
+                Instant[] instantTimes = TimeConverterUtil.convertToInstant(timeArray, timeGranularitySeconds);
+                return new DssTimeSeries(instantTimes, valueArray, dataUnits, dataType);
             } else {
                 String message = formatLogMessage("Failed tsRetrieve", dssFileName, dssPathname, startDate, startTime, endDate, endTime);
                 logger.warning(message);
