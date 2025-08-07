@@ -1,6 +1,6 @@
 package mil.army.usace.hec.dss.api.timeseries;
 
-import mil.army.usace.hec.dss.internal.RawDssTimeSeries;
+import mil.army.usace.hec.dss.internal.DssTimeSeries;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -10,7 +10,7 @@ record TimeSeriesDataImpl(
         Map<LocalDateTime, Double> data
 ) implements TimeSeriesData {
 
-    static TimeSeriesData of(RawDssTimeSeries timeSeries) {
+    static TimeSeriesData of(DssTimeSeries timeSeries) {
 
         return null;
     }

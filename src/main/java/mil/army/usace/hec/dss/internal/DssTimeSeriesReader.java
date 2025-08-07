@@ -19,7 +19,7 @@ public class DssTimeSeriesReader {
         // Utility Class
     }
 
-    public static RawDssTimeSeries getTimeSeries(String dssFileName, String dssPathname, ZonedDateTime startTime, ZonedDateTime endTime) {
+    public static DssTimeSeries getTimeSeries(String dssFileName, String dssPathname, ZonedDateTime startTime, ZonedDateTime endTime) {
         String startDateString = startTime.toLocalDate().toString();
         String startTimeString = startTime.toLocalTime().toString();
         String endDateString = endTime.toLocalDate().toString();
@@ -27,7 +27,7 @@ public class DssTimeSeriesReader {
         return getTimeSeries(dssFileName, dssPathname, startDateString, startTimeString, endDateString, endTimeString);
     }
     
-    private static RawDssTimeSeries getTimeSeries(String dssFileName, String dssPathname, String startDate, String startTime, String endDate, String endTime) {
+    private static DssTimeSeries getTimeSeries(String dssFileName, String dssPathname, String startDate, String startTime, String endDate, String endTime) {
         try (DssSession dssSession = DssSession.initiate(dssFileName)) {
             Arena memorySession = dssSession.getMemorySession();
             MemoryAllocator memoryAllocator = MemoryAllocator.create(ForeignLanguage.C, memorySession);
@@ -89,10 +89,10 @@ public class DssTimeSeriesReader {
 
                 boolean isValid = validateOutputs(timeArray, valueArray, numberValuesRead);
                 if (!isValid) {
-                    return RawDssTimeSeries.empty();
+                    return DssTimeSeries.empty();
                 }
 
-                return new RawDssTimeSeries(timeArray, valueArray, timeGranularitySeconds, dataUnits, dataType);
+                return new DssTimeSeries(timeArray, valueArray, timeGranularitySeconds, dataUnits, dataType);
             } else {
                 String message = formatLogMessage("Failed tsRetrieve", dssFileName, dssPathname, startDate, startTime, endDate, endTime);
                 logger.warning(message);
@@ -101,7 +101,7 @@ public class DssTimeSeriesReader {
             logger.severe(exception.getMessage());
         }
 
-        return RawDssTimeSeries.empty();
+        return DssTimeSeries.empty();
     }
 
     private static int[] getTimeSeriesSizes(String dssFileName, String dssPathname, String startDate, String startTime, String endDate, String endTime) {

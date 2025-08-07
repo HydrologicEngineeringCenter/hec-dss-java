@@ -1,7 +1,6 @@
 package mil.army.usace.hec.dss.internal;
 
 import mil.army.usace.hec.dss.TestUtil;
-import mil.army.usace.hec.dss.api.TimeSeriesData;
 import org.junit.jupiter.api.Test;
 
 import java.time.ZonedDateTime;
@@ -15,7 +14,7 @@ class DssTimeSeriesReaderTest {
         String dssPathname = "/regular-time-series/GAPT/FLOW/*/6Hour/forecast1/";
         ZonedDateTime startTime = ZonedDateTime.parse("2021-09-15T07:00:00Z");
         ZonedDateTime endTime = ZonedDateTime.parse("2021-10-04T07:00:00Z");
-        RawDssTimeSeries timeSeriesData = DssTimeSeriesReader.getTimeSeries(dssFileName, dssPathname, startTime, endTime);
+        DssTimeSeries timeSeriesData = DssTimeSeriesReader.getTimeSeries(dssFileName, dssPathname, startTime, endTime);
         assertEquals(77, timeSeriesData.times().length);
     }
 }

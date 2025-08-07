@@ -1,6 +1,6 @@
 package mil.army.usace.hec.dss.internal;
 
-record RawDssGrid(
+record DssGrid(
         int type,
         int dataType,
         int lowerLeftCellX,

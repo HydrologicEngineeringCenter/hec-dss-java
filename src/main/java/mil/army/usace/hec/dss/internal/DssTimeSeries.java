@@ -3,20 +3,20 @@ package mil.army.usace.hec.dss.internal;
 import java.util.Arrays;
 import java.util.Objects;
 
-public record RawDssTimeSeries(
+public record DssTimeSeries(
         int[] times,
         double[] values,
         int timeGranularitySeconds,
         String dataUnits,
         String dataType
 ) {
-    static RawDssTimeSeries empty() {
-        return new RawDssTimeSeries(new int[0], new double[0], 0, "", "");
+    static DssTimeSeries empty() {
+        return new DssTimeSeries(new int[0], new double[0], 0, "", "");
     }
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof RawDssTimeSeries(
+        if (!(o instanceof DssTimeSeries(
                 int[] times1, double[] values1, int granularitySeconds, String units, String type
         ))) return false;
         return timeGranularitySeconds == granularitySeconds

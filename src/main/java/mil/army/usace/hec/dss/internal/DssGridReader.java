@@ -20,13 +20,13 @@ public final class DssGridReader {
         // Utility Class
     }
 
-    public static RawDssGrid getGriddedData(String dssFileName, String dssPathname) {
-        RawDssGrid noDataGrid = retrieveRawDssGrid(dssFileName, dssPathname, 0);
+    public static DssGrid getGriddedData(String dssFileName, String dssPathname) {
+        DssGrid noDataGrid = retrieveRawDssGrid(dssFileName, dssPathname, 0);
         int dataLength = noDataGrid.numberOfCellsX() * noDataGrid.numberOfCellsY();
         return retrieveRawDssGrid(dssFileName, dssPathname, dataLength);
     }
 
-    private static RawDssGrid retrieveRawDssGrid(String dssFileName, String dssPathname, int dataToReadCount) {
+    private static DssGrid retrieveRawDssGrid(String dssFileName, String dssPathname, int dataToReadCount) {
         try (DssSession dssSession = DssSession.initiate(dssFileName)) {
             Arena memorySession = dssSession.getMemorySession();
             MemoryAllocator memoryAllocator = MemoryAllocator.create(ForeignLanguage.C, memorySession);
@@ -93,7 +93,7 @@ public final class DssGridReader {
                     dataOutput, dataToReadCount
             );
 
-            return new RawDssGrid(
+            return new DssGrid(
                     MemoryParser.parseInt(typeOutput),
                     MemoryParser.parseInt(dataTypeOutput),
                     MemoryParser.parseInt(lowerLeftCellXOutput),
