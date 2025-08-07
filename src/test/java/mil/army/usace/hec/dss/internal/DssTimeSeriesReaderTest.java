@@ -17,4 +17,14 @@ class DssTimeSeriesReaderTest {
         DssTimeSeries timeSeriesData = DssTimeSeriesReader.getTimeSeries(dssFileName, dssPathname, startTime, endTime);
         assertEquals(77, timeSeriesData.times().length);
     }
+
+    @Test
+    void RetrieveIrregularTimeSeries() {
+        String dssFileName = TestUtil.getResourceFile("examples-all-data-types.dss").toString();
+        String dssPathname = "/irregular-time-series/FAIR OAKS CA/FLOW-ANNUAL PEAK/01Jan1900/IR-Century/USGS/";
+        ZonedDateTime startTime = ZonedDateTime.parse("1905-03-20T00:00:00Z");
+        ZonedDateTime endTime = ZonedDateTime.parse("2017-02-11T00:00:00Z");
+        DssTimeSeries timeSeriesData = DssTimeSeriesReader.getTimeSeries(dssFileName, dssPathname, startTime, endTime);
+        assertEquals(112, timeSeriesData.times().length);
+    }
 }
