@@ -1,22 +1,24 @@
 package mil.army.usace.hec.dss.internal;
 
+import apifinal.DssTimeSeries;
+
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Objects;
 
-public record DssTimeSeries(
+public record DssTimeSeriesImpl(
         Instant[] times,
         double[] values,
         String dataUnits,
         String dataType
-) {
-    static DssTimeSeries empty() {
-        return new DssTimeSeries(new Instant[0], new double[0], "", "");
+) implements DssTimeSeries {
+    static DssTimeSeriesImpl empty() {
+        return new DssTimeSeriesImpl(new Instant[0], new double[0], "", "");
     }
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof DssTimeSeries(
+        if (!(o instanceof DssTimeSeriesImpl(
                 Instant[] times1, double[] values1, String units, String type
         ))) return false;
         return Objects.deepEquals(times, times1)

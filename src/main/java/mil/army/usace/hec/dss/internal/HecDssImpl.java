@@ -9,10 +9,12 @@ import java.util.stream.Stream;
 public final class HecDssImpl implements HecDss {
     private final DssSession dssSession;
     private final DssCatalogService dssCatalogService;
+    private final DssTimeSeriesService dssTimeSeriesService;
 
     private HecDssImpl(String dssFileName) {
         dssSession = DssSession.initiate(dssFileName);
         dssCatalogService = new DssCatalogService(dssSession);
+        dssTimeSeriesService = new DssTimeSeriesService(dssSession);
     }
 
     public static HecDss open(String dssFileName) {
@@ -46,7 +48,7 @@ public final class HecDssImpl implements HecDss {
 
     @Override
     public DssTimeSeries getTimeSeries(DssPathname pathname) {
-        return null;
+        return dssTimeSeriesService.getTimeSeries(pathname);
     }
 
     @Override

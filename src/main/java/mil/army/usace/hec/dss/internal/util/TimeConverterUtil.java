@@ -23,6 +23,10 @@ public class TimeConverterUtil {
         return BASE_JULIAN_TIME.plus(timeDeltaCount, timeDeltaUnit).toInstant(BASE_ZONE_OFFSET);
     }
 
+    public static ZonedDateTime toZonedDateTime(Instant instant) {
+        return instant.atZone(BASE_ZONE_OFFSET);
+    }
+
     private static ChronoUnit toChronoUnit(int timeGranularitySeconds) {
         if (timeGranularitySeconds == 60) {
             return ChronoUnit.MINUTES;
