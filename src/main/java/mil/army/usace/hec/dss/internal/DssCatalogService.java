@@ -28,7 +28,7 @@ final class DssCatalogService {
         Arena memorySession = dssSession.getMemorySession();
         MemoryAllocator memoryAllocator = MemoryAllocator.create(ForeignLanguage.C, memorySession);
 
-        int recordCount = hecdss_h.hec_dss_record_count(dssSession.getDssStackPointer());
+        int recordCount = getRecordCount();
         int charBufferLength = MAX_PATHNAME_LENGTH * recordCount;
 
         MemorySegment pathBuffer = memoryAllocator.allocateChars(charBufferLength);
@@ -48,5 +48,9 @@ final class DssCatalogService {
                 .map(DssPathname::parse)
                 .filter(Optional::isPresent)
                 .map(Optional::get);
+    }
+
+    int getRecordCount() {
+        return hecdss_h.hec_dss_record_count(dssSession.getDssStackPointer());
     }
 }

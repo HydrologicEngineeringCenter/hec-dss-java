@@ -41,7 +41,7 @@ public final class HecDssImpl implements HecDss {
 
     @Override
     public int getRecordCount() {
-        return 0;
+        return dssCatalogService.getRecordCount();
     }
 
     @Override
