@@ -1,8 +1,8 @@
 package mil.army.usace.hec.dss.internal;
 
-import apifinal.DssException;
-import apifinal.DssPathname;
-import apifinal.DssTimeSeries;
+import api.DssException;
+import api.DssPathname;
+import api.DssTimeSeries;
 import mil.army.usace.hec.dss.internal.natives.ForeignLanguage;
 import mil.army.usace.hec.dss.internal.natives.MemoryAllocator;
 import mil.army.usace.hec.dss.internal.natives.MemoryParser;

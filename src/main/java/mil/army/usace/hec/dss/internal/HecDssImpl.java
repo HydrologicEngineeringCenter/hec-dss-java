@@ -1,8 +1,8 @@
 package mil.army.usace.hec.dss.internal;
 
-import apifinal.*;
-import apifinal.DssTimeSeries;
-import apifinal.HecDss;
+import api.*;
+import api.DssTimeSeries;
+import api.HecDss;
 
 import java.util.stream.Stream;
 

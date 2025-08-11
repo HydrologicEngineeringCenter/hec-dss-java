@@ -1,6 +1,6 @@
 package mil.army.usace.hec.dss.internal;
 
-import apifinal.DssTimeSeries;
+import api.DssTimeSeries;
 
 import java.time.Instant;
 import java.util.Arrays;

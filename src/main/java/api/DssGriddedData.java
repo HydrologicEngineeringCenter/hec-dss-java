@@ -1,4 +1,4 @@
-package apifinal;
+package api;
 
 public interface DssGriddedData {
 }

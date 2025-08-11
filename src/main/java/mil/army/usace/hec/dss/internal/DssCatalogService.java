@@ -1,6 +1,6 @@
 package mil.army.usace.hec.dss.internal;
 
-import apifinal.DssPathname;
+import api.DssPathname;
 import mil.army.usace.hec.dss.internal.natives.ForeignLanguage;
 import mil.army.usace.hec.dss.internal.natives.MemoryAllocator;
 import mil.army.usace.hec.dss.internal.natives.MemoryParser;
