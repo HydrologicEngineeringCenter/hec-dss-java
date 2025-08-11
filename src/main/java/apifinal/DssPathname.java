@@ -58,6 +58,10 @@ public record DssPathname(String aPart, String bPart, String cPart, String dPart
         }
     }
 
+    public static DssPathname empty() {
+        return new DssPathname("", "", "", "", "", "");
+    }
+
     /**
      * Checks if a string represents a valid DSS pathname.
      */

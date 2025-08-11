@@ -6,11 +6,17 @@ import apifinal.HecDss;
 
 import java.util.stream.Stream;
 
-public record HecDssImpl(
-        DssSession dssSession
-) implements HecDss {
+public final class HecDssImpl implements HecDss {
+    private final DssSession dssSession;
+    private final DssCatalogService dssCatalogService;
+
+    private HecDssImpl(String dssFileName) {
+        dssSession = DssSession.initiate(dssFileName);
+        dssCatalogService = new DssCatalogService(dssSession);
+    }
+
     public static HecDss open(String dssFileName) {
-        return new HecDssImpl(DssSession.initiate(dssFileName));
+        return new HecDssImpl(dssFileName);
     }
 
     @Override
@@ -30,7 +36,7 @@ public record HecDssImpl(
 
     @Override
     public Stream<DssPathname> getCatalog() {
-        return Stream.empty();
+        return dssCatalogService.getCatalog();
     }
 
     @Override
