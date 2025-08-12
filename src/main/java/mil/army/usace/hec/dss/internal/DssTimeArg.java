@@ -5,7 +5,7 @@ import mil.army.usace.hec.dss.internal.util.TimeConverterUtil;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 
-public record DssTimeArg(
+record DssTimeArg(
         String startDate,
         String startTime,
         String endDate,

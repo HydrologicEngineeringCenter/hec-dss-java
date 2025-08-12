@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.Objects;
 
-public record DssTimeSeriesImpl(
+record DssTimeSeriesImpl(
         Instant[] times,
         double[] values,
         String dataUnits,
