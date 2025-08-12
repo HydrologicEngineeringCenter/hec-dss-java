@@ -3,6 +3,7 @@ package mil.army.usace.hec.dss.internal;
 import api.DssException;
 import api.DssPathname;
 import api.DssTimeSeries;
+import api.DssTimeWindow;
 import mil.army.usace.hec.dss.internal.natives.ForeignLanguage;
 import mil.army.usace.hec.dss.internal.natives.MemoryAllocator;
 import mil.army.usace.hec.dss.internal.natives.MemoryParser;
@@ -12,6 +13,8 @@ import mil.army.usace.hec.dss.internal.util.TimeConverterUtil;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.logging.Logger;
 
 final class DssTimeSeriesService {
@@ -26,14 +29,15 @@ final class DssTimeSeriesService {
     }
 
     DssTimeSeries getTimeSeries(DssPathname pathname) {
-        throw new UnsupportedOperationException("TODO: Implement by calling hec_dss_tsGetDateTimeRange");
+        DssTimeWindow timeWindow = getTimeSeriesRange(pathname);
+        return getTimeSeries(pathname, timeWindow);
     }
 
-    DssTimeSeries getTimeSeries(DssPathname pathname, Instant startTime, Instant endTime) {
+    DssTimeSeries getTimeSeries(DssPathname pathname, DssTimeWindow timeWindow) {
         Arena memorySession = dssSession.getMemorySession();
         MemoryAllocator memoryAllocator = MemoryAllocator.create(ForeignLanguage.C, memorySession);
 
-        DssTimeArg dssTimeArg = DssTimeArg.from(startTime, endTime);
+        DssTimeArg dssTimeArg = DssTimeArg.from(timeWindow.start(), timeWindow.end());
         int[] numberValuesAndQualityWidth = getTimeSeriesSizes(pathname, dssTimeArg);
         int numberValues = numberValuesAndQualityWidth[0];
         int qualityWidth = numberValuesAndQualityWidth[1];
@@ -132,6 +136,66 @@ final class DssTimeSeriesService {
         } else {
             throw new DssException("Failed to retrieve time series size");
         }
+    }
+
+    private DssTimeWindow getTimeSeriesRange(DssPathname dssPathname) {
+        Arena memorySession = dssSession.getMemorySession();
+        MemoryAllocator memoryAllocator = MemoryAllocator.create(ForeignLanguage.C, memorySession);
+
+        MemorySegment dssPointer = dssSession.getDssStackPointer();
+        MemorySegment dssPathnameInput = memoryAllocator.allocateString(dssPathname.toString());
+        int boolFullSet = 1; // Returning the full dataset
+        MemorySegment firstValidJulianOutput = memoryAllocator.allocateInts(1);
+        MemorySegment firstSecondsOutput = memoryAllocator.allocateInts(1);
+        MemorySegment lastValidJulianOutput = memoryAllocator.allocateInts(1);
+        MemorySegment lastSecondsOutput = memoryAllocator.allocateInts(1);
+
+        int status = hecdss_h.hec_dss_tsGetDateTimeRange(
+                dssPointer,
+                dssPathnameInput,
+                boolFullSet,
+                firstValidJulianOutput,
+                firstSecondsOutput,
+                lastValidJulianOutput,
+                lastSecondsOutput
+        );
+
+        if (status == 0) {
+            int firstValidJulian = MemoryParser.parseInt(firstValidJulianOutput);
+            int firstSeconds = MemoryParser.parseInt(firstSecondsOutput);
+            Instant startTime = convertJulianToInstant(firstValidJulian, firstSeconds);
+
+            int lastValidJulian = MemoryParser.parseInt(lastValidJulianOutput);
+            int lastSeconds = MemoryParser.parseInt(lastSecondsOutput);
+            Instant endTime = convertJulianToInstant(lastValidJulian, lastSeconds);
+
+            return new DssTimeWindow(startTime, endTime);
+        } else {
+            throw new DssException("Failed to retrieve time series range");
+        }
+    }
+
+    private Instant convertJulianToInstant(int julian, int seconds) {
+        Arena memorySession = dssSession.getMemorySession();
+        MemoryAllocator memoryAllocator = MemoryAllocator.create(ForeignLanguage.C, memorySession);
+
+        MemorySegment yearOutput = memoryAllocator.allocateInts(1);
+        MemorySegment monthOutput = memoryAllocator.allocateInts(1);
+        MemorySegment dayOutput = memoryAllocator.allocateInts(1);
+
+        hecdss_h.hec_dss_julianToYearMonthDay(
+                julian,
+                yearOutput,
+                monthOutput,
+                dayOutput
+        );
+
+        int year = MemoryParser.parseInt(yearOutput);
+        int month = MemoryParser.parseInt(monthOutput);
+        int day = MemoryParser.parseInt(dayOutput);
+
+        OffsetDateTime offsetDateTime = OffsetDateTime.of(year, month, day, 0, 0, seconds, 0, ZoneOffset.UTC);
+        return offsetDateTime.toInstant();
     }
 
     /* Validation */

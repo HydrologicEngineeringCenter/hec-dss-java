@@ -53,7 +53,7 @@ public final class HecDssImpl implements HecDss {
 
     @Override
     public DssTimeSeries getTimeSeries(DssPathname pathname, DssTimeWindow timeWindow) {
-        return null;
+        return dssTimeSeriesService.getTimeSeries(pathname, timeWindow);
     }
 
     @Override
