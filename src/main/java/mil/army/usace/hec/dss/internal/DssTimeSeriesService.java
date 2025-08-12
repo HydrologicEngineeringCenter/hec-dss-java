@@ -194,7 +194,8 @@ final class DssTimeSeriesService {
         int month = MemoryParser.parseInt(monthOutput);
         int day = MemoryParser.parseInt(dayOutput);
 
-        OffsetDateTime offsetDateTime = OffsetDateTime.of(year, month, day, 0, 0, seconds, 0, ZoneOffset.UTC);
+        OffsetDateTime offsetDateTime = OffsetDateTime.of(year, month, day, 0, 0, 0, 0, ZoneOffset.UTC);
+        offsetDateTime.plusSeconds(seconds);
         return offsetDateTime.toInstant();
     }
 
