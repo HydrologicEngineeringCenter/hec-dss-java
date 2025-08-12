@@ -58,8 +58,8 @@ public record DssPathname(String aPart, String bPart, String cPart, String dPart
         }
     }
 
-    public static DssPathname empty() {
-        return new DssPathname("", "", "", "", "", "");
+    public static DssPathname matchAllPattern() {
+        return new DssPathname("*", "*", "*", "*", "*", "*");
     }
 
     /**

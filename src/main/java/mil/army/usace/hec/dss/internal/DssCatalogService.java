@@ -20,7 +20,7 @@ final class DssCatalogService {
     }
 
     Stream<DssPathname> getCatalog() {
-        DssPathname matchAllPattern = DssPathname.empty();
+        DssPathname matchAllPattern = DssPathname.matchAllPattern();
         return getCatalog(matchAllPattern);
     }
 
